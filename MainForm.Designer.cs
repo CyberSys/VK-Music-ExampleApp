@@ -28,35 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.SuspendLayout();
+            dataGridView1 = new DataGridView();
+            panel1 = new Panel();
+            listBoxPlugins = new ListBox();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            SuspendLayout();
             // 
             // dataGridView1
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(29, 50);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(697, 328);
-            this.dataGridView1.TabIndex = 0;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(3, 67);
+            dataGridView1.Margin = new Padding(4, 3, 4, 3);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowTemplate.Height = 23;
+            dataGridView1.Size = new Size(344, 378);
+            dataGridView1.TabIndex = 0;
+            dataGridView1.CellContentDoubleClick += dataGridView1_CellContentDoubleClick;
+            // 
+            // panel1
+            // 
+            panel1.Location = new Point(354, 67);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(585, 378);
+            panel1.TabIndex = 1;
+            // 
+            // listBoxPlugins
+            // 
+            listBoxPlugins.FormattingEnabled = true;
+            listBoxPlugins.ItemHeight = 15;
+            listBoxPlugins.Location = new Point(3, 12);
+            listBoxPlugins.Name = "listBoxPlugins";
+            listBoxPlugins.Size = new Size(529, 49);
+            listBoxPlugins.TabIndex = 2;
+            listBoxPlugins.DoubleClick += listBoxPlugins_DoubleClick;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.dataGridView1);
-            this.Name = "MainForm";
-            this.Text = "MainForm";
-            this.Load += new System.EventHandler(this.MainForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(933, 519);
+            Controls.Add(dataGridView1);
+            Controls.Add(listBoxPlugins);
+            Controls.Add(panel1);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "MainForm";
+            Text = "MainForm";
+            Load += MainForm_Load;
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
 
         private DataGridView dataGridView1;
+        private Panel panel1;
+        private ListBox listBoxPlugins;
     }
 }

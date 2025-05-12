@@ -29,168 +29,197 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
-            this.codeeloGradientPanel1 = new CodeeloUI.Controls.CodeeloGradientPanel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.authButton = new CodeeloUI.Controls.CodeeloButton();
-            this.codeeloTextBox2 = new CodeeloUI.Controls.CodeeloTextBox();
-            this.codeeloTextBox1 = new CodeeloUI.Controls.CodeeloTextBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.codeeloGradientPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.SuspendLayout();
+            codeeloGradientPanel1 = new CodeeloUI.Controls.CodeeloGradientPanel();
+            codeeloTextBox3 = new CodeeloUI.Controls.CodeeloTextBox();
+            label1 = new Label();
+            authButton = new CodeeloUI.Controls.CodeeloButton();
+            codeeloTextBox2 = new CodeeloUI.Controls.CodeeloTextBox();
+            codeeloTextBox1 = new CodeeloUI.Controls.CodeeloTextBox();
+            pictureBox2 = new PictureBox();
+            pictureBox1 = new PictureBox();
+            codeeloGradientPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            SuspendLayout();
             // 
             // codeeloGradientPanel1
             // 
-            this.codeeloGradientPanel1.AccessibleRole = null;
-            this.codeeloGradientPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.codeeloGradientPanel1.CausesValidation = false;
-            this.codeeloGradientPanel1.ColorFillFirst = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(48)))));
-            this.codeeloGradientPanel1.ColorFillSecond = System.Drawing.Color.FromArgb(((int)(((byte)(78)))), ((int)(((byte)(81)))), ((int)(((byte)(97)))));
-            this.codeeloGradientPanel1.Controls.Add(this.label1);
-            this.codeeloGradientPanel1.Controls.Add(this.authButton);
-            this.codeeloGradientPanel1.Controls.Add(this.codeeloTextBox2);
-            this.codeeloGradientPanel1.Controls.Add(this.codeeloTextBox1);
-            this.codeeloGradientPanel1.Controls.Add(this.pictureBox2);
-            this.codeeloGradientPanel1.Controls.Add(this.pictureBox1);
-            this.codeeloGradientPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.codeeloGradientPanel1.DrawGradient = true;
-            this.codeeloGradientPanel1.GradientDirection = System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal;
-            this.codeeloGradientPanel1.Location = new System.Drawing.Point(0, 0);
-            this.codeeloGradientPanel1.Name = "codeeloGradientPanel1";
-            this.codeeloGradientPanel1.Size = new System.Drawing.Size(670, 200);
-            this.codeeloGradientPanel1.TabIndex = 0;
+            codeeloGradientPanel1.AccessibleRole = null;
+            codeeloGradientPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            codeeloGradientPanel1.CausesValidation = false;
+            codeeloGradientPanel1.ColorFillFirst = Color.FromArgb(32, 32, 48);
+            codeeloGradientPanel1.ColorFillSecond = Color.FromArgb(78, 81, 97);
+            codeeloGradientPanel1.Controls.Add(codeeloTextBox3);
+            codeeloGradientPanel1.Controls.Add(label1);
+            codeeloGradientPanel1.Controls.Add(authButton);
+            codeeloGradientPanel1.Controls.Add(codeeloTextBox2);
+            codeeloGradientPanel1.Controls.Add(codeeloTextBox1);
+            codeeloGradientPanel1.Controls.Add(pictureBox2);
+            codeeloGradientPanel1.Controls.Add(pictureBox1);
+            codeeloGradientPanel1.Dock = DockStyle.Fill;
+            codeeloGradientPanel1.DrawGradient = true;
+            codeeloGradientPanel1.GradientDirection = System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal;
+            codeeloGradientPanel1.Location = new Point(0, 0);
+            codeeloGradientPanel1.Margin = new Padding(4, 3, 4, 3);
+            codeeloGradientPanel1.Name = "codeeloGradientPanel1";
+            codeeloGradientPanel1.Size = new Size(782, 231);
+            codeeloGradientPanel1.TabIndex = 0;
+            // 
+            // codeeloTextBox3
+            // 
+            codeeloTextBox3.BackColor = Color.FromArgb(78, 81, 97);
+            codeeloTextBox3.BorderColor = Color.FromArgb(246, 195, 59);
+            codeeloTextBox3.BorderFocusColor = Color.FromArgb(255, 152, 0);
+            codeeloTextBox3.BorderSize = 2;
+            codeeloTextBox3.Font = new Font("Roboto", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            codeeloTextBox3.ForeColor = Color.WhiteSmoke;
+            codeeloTextBox3.Location = new Point(245, 165);
+            codeeloTextBox3.Margin = new Padding(5);
+            codeeloTextBox3.Multiline = false;
+            codeeloTextBox3.Name = "codeeloTextBox3";
+            codeeloTextBox3.Padding = new Padding(8);
+            codeeloTextBox3.PlaceholderColor = Color.Gray;
+            codeeloTextBox3.PlaceholderText = "Код двухфакторной аутентификации";
+            codeeloTextBox3.Size = new Size(150, 40);
+            codeeloTextBox3.TabIndex = 6;
+            codeeloTextBox3.UnderlinedStyle = true;
+            codeeloTextBox3.UsePasswordChar = false;
+            codeeloTextBox3.Visible = false;
+            codeeloTextBox3.KeyPress += codeeloTextBox3_KeyPress;
             // 
             // label1
             // 
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Image = ((System.Drawing.Image)(resources.GetObject("label1.Image")));
-            this.label1.Location = new System.Drawing.Point(651, 1);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(18, 18);
-            this.label1.TabIndex = 5;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            label1.BackColor = Color.Transparent;
+            label1.Image = (Image)resources.GetObject("label1.Image");
+            label1.Location = new Point(760, 1);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(21, 21);
+            label1.TabIndex = 5;
+            label1.Click += label1_Click;
             // 
             // authButton
             // 
-            this.authButton.AccessibleRole = null;
-            this.authButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.authButton.BackColor = System.Drawing.Color.Transparent;
-            this.authButton.BorderRadius = 20;
-            this.authButton.BorderSize = 3;
-            this.authButton.CausesValidation = false;
-            this.authButton.ColorFillFirst = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(48)))));
-            this.authButton.ColorFillSecond = System.Drawing.Color.FromArgb(((int)(((byte)(78)))), ((int)(((byte)(81)))), ((int)(((byte)(97)))));
-            this.authButton.DialogResult = false;
-            this.authButton.FlatAppearance.BorderSize = 0;
-            this.authButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.authButton.Font = new System.Drawing.Font("Roboto", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.authButton.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.authButton.GradientBorderColorFirst = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(195)))), ((int)(((byte)(59)))));
-            this.authButton.GradientBorderColorSecond = System.Drawing.Color.SpringGreen;
-            this.authButton.GradientBorderDirection = System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal;
-            this.authButton.GradientDirection = System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal;
-            this.authButton.Location = new System.Drawing.Point(346, 143);
-            this.authButton.Name = "authButton";
-            this.authButton.OnClickFirstBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(150)))), ((int)(((byte)(10)))));
-            this.authButton.OnClickFirstFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(48)))));
-            this.authButton.OnClickSecondBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(195)))), ((int)(((byte)(70)))));
-            this.authButton.OnClickSecondFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(78)))), ((int)(((byte)(81)))), ((int)(((byte)(97)))));
-            this.authButton.OnOverFirstBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(175)))), ((int)(((byte)(39)))));
-            this.authButton.OnOverFirstFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(48)))));
-            this.authButton.OnOverSecondBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(225)))), ((int)(((byte)(97)))));
-            this.authButton.OnOverSecondFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(78)))), ((int)(((byte)(81)))), ((int)(((byte)(97)))));
-            this.authButton.Size = new System.Drawing.Size(114, 45);
-            this.authButton.TabIndex = 1;
-            this.authButton.TabStop = false;
-            this.authButton.Text = "Вход";
-            this.authButton.TextAlign = CodeeloUI.Enums.TextPosition.Center;
-            this.authButton.UseGradient = true;
-            this.authButton.UseGradientBorder = true;
-            this.authButton.UseMnemonic = false;
-            this.authButton.UseVisualStyleBackColor = false;
-            this.authButton.Click += new System.EventHandler(this.authButton_Click);
+            authButton.AccessibleRole = null;
+            authButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            authButton.BackColor = Color.Transparent;
+            authButton.BorderRadius = 20;
+            authButton.BorderSize = 3;
+            authButton.CausesValidation = false;
+            authButton.ColorFillFirst = Color.FromArgb(32, 32, 48);
+            authButton.ColorFillSecond = Color.FromArgb(78, 81, 97);
+            authButton.DialogResult = false;
+            authButton.FlatAppearance.BorderSize = 0;
+            authButton.FlatStyle = FlatStyle.Flat;
+            authButton.Font = new Font("Roboto", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            authButton.ForeColor = Color.WhiteSmoke;
+            authButton.GradientBorderColorFirst = Color.FromArgb(246, 195, 59);
+            authButton.GradientBorderColorSecond = Color.SpringGreen;
+            authButton.GradientBorderDirection = System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal;
+            authButton.GradientDirection = System.Drawing.Drawing2D.LinearGradientMode.ForwardDiagonal;
+            authButton.Location = new Point(404, 165);
+            authButton.Margin = new Padding(4, 3, 4, 3);
+            authButton.Name = "authButton";
+            authButton.OnClickFirstBorderColor = Color.FromArgb(200, 150, 10);
+            authButton.OnClickFirstFillColor = Color.FromArgb(32, 32, 48);
+            authButton.OnClickSecondBorderColor = Color.FromArgb(60, 195, 70);
+            authButton.OnClickSecondFillColor = Color.FromArgb(78, 81, 97);
+            authButton.OnOverFirstBorderColor = Color.FromArgb(226, 175, 39);
+            authButton.OnOverFirstFillColor = Color.FromArgb(32, 32, 48);
+            authButton.OnOverSecondBorderColor = Color.FromArgb(30, 225, 97);
+            authButton.OnOverSecondFillColor = Color.FromArgb(78, 81, 97);
+            authButton.Size = new Size(133, 52);
+            authButton.TabIndex = 1;
+            authButton.TabStop = false;
+            authButton.Text = "Вход";
+            authButton.TextAlign = CodeeloUI.Enums.TextPosition.Center;
+            authButton.UseGradient = true;
+            authButton.UseGradientBorder = true;
+            authButton.UseMnemonic = false;
+            authButton.UseVisualStyleBackColor = false;
+            authButton.Click += authButton_Click;
             // 
             // codeeloTextBox2
             // 
-            this.codeeloTextBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(78)))), ((int)(((byte)(81)))), ((int)(((byte)(97)))));
-            this.codeeloTextBox2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(195)))), ((int)(((byte)(59)))));
-            this.codeeloTextBox2.BorderFocusColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(0)))));
-            this.codeeloTextBox2.BorderSize = 2;
-            this.codeeloTextBox2.Font = new System.Drawing.Font("Roboto", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.codeeloTextBox2.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.codeeloTextBox2.Location = new System.Drawing.Point(210, 84);
-            this.codeeloTextBox2.Margin = new System.Windows.Forms.Padding(4);
-            this.codeeloTextBox2.Multiline = false;
-            this.codeeloTextBox2.Name = "codeeloTextBox2";
-            this.codeeloTextBox2.Padding = new System.Windows.Forms.Padding(7);
-            this.codeeloTextBox2.PlaceholderColor = System.Drawing.Color.Gray;
-            this.codeeloTextBox2.PlaceholderText = "Пароль";
-            this.codeeloTextBox2.Size = new System.Drawing.Size(250, 38);
-            this.codeeloTextBox2.TabIndex = 3;
-            this.codeeloTextBox2.UnderlinedStyle = true;
-            this.codeeloTextBox2.UsePasswordChar = true;
+            codeeloTextBox2.BackColor = Color.FromArgb(78, 81, 97);
+            codeeloTextBox2.BorderColor = Color.FromArgb(246, 195, 59);
+            codeeloTextBox2.BorderFocusColor = Color.FromArgb(255, 152, 0);
+            codeeloTextBox2.BorderSize = 2;
+            codeeloTextBox2.Font = new Font("Roboto", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            codeeloTextBox2.ForeColor = Color.WhiteSmoke;
+            codeeloTextBox2.Location = new Point(245, 97);
+            codeeloTextBox2.Margin = new Padding(5);
+            codeeloTextBox2.Multiline = false;
+            codeeloTextBox2.Name = "codeeloTextBox2";
+            codeeloTextBox2.Padding = new Padding(8);
+            codeeloTextBox2.PlaceholderColor = Color.Gray;
+            codeeloTextBox2.PlaceholderText = "Пароль";
+            codeeloTextBox2.Size = new Size(292, 40);
+            codeeloTextBox2.TabIndex = 3;
+            codeeloTextBox2.UnderlinedStyle = true;
+            codeeloTextBox2.UsePasswordChar = true;
             // 
             // codeeloTextBox1
             // 
-            this.codeeloTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(78)))), ((int)(((byte)(81)))), ((int)(((byte)(97)))));
-            this.codeeloTextBox1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(195)))), ((int)(((byte)(59)))));
-            this.codeeloTextBox1.BorderFocusColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(0)))));
-            this.codeeloTextBox1.BorderSize = 2;
-            this.codeeloTextBox1.Font = new System.Drawing.Font("Roboto", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.codeeloTextBox1.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.codeeloTextBox1.Location = new System.Drawing.Point(210, 38);
-            this.codeeloTextBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.codeeloTextBox1.Multiline = false;
-            this.codeeloTextBox1.Name = "codeeloTextBox1";
-            this.codeeloTextBox1.Padding = new System.Windows.Forms.Padding(7);
-            this.codeeloTextBox1.PlaceholderColor = System.Drawing.Color.Gray;
-            this.codeeloTextBox1.PlaceholderText = "VK логин";
-            this.codeeloTextBox1.Size = new System.Drawing.Size(250, 38);
-            this.codeeloTextBox1.TabIndex = 2;
-            this.codeeloTextBox1.UnderlinedStyle = true;
-            this.codeeloTextBox1.UsePasswordChar = false;
+            codeeloTextBox1.BackColor = Color.FromArgb(78, 81, 97);
+            codeeloTextBox1.BorderColor = Color.FromArgb(246, 195, 59);
+            codeeloTextBox1.BorderFocusColor = Color.FromArgb(255, 152, 0);
+            codeeloTextBox1.BorderSize = 2;
+            codeeloTextBox1.Font = new Font("Roboto", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            codeeloTextBox1.ForeColor = Color.WhiteSmoke;
+            codeeloTextBox1.Location = new Point(245, 44);
+            codeeloTextBox1.Margin = new Padding(5);
+            codeeloTextBox1.Multiline = false;
+            codeeloTextBox1.Name = "codeeloTextBox1";
+            codeeloTextBox1.Padding = new Padding(8);
+            codeeloTextBox1.PlaceholderColor = Color.Gray;
+            codeeloTextBox1.PlaceholderText = "VK логин";
+            codeeloTextBox1.Size = new Size(292, 40);
+            codeeloTextBox1.TabIndex = 2;
+            codeeloTextBox1.UnderlinedStyle = true;
+            codeeloTextBox1.UsePasswordChar = false;
             // 
             // pictureBox2
             // 
-            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(467, 29);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(191, 182);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 1;
-            this.pictureBox2.TabStop = false;
+            pictureBox2.BackColor = Color.Transparent;
+            pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
+            pictureBox2.Location = new Point(545, 33);
+            pictureBox2.Margin = new Padding(4, 3, 4, 3);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(223, 210);
+            pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox2.TabIndex = 1;
+            pictureBox2.TabStop = false;
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(12, 29);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(191, 182);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            pictureBox1.BackColor = Color.Transparent;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(14, 33);
+            pictureBox1.Margin = new Padding(4, 3, 4, 3);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(223, 210);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 0;
+            pictureBox1.TabStop = false;
             // 
             // LoginForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(670, 200);
-            this.Controls.Add(this.codeeloGradientPanel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "LoginForm";
-            this.Opacity = 0.9D;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
-            this.codeeloGradientPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(32, 32, 48);
+            ClientSize = new Size(782, 231);
+            Controls.Add(codeeloGradientPanel1);
+            FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "LoginForm";
+            Opacity = 0.9D;
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Form1";
+            codeeloGradientPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -202,5 +231,6 @@
         private CodeeloUI.Controls.CodeeloButton authButton;
         private CodeeloUI.Controls.CodeeloTextBox codeeloTextBox2;
         private CodeeloUI.Controls.CodeeloTextBox codeeloTextBox1;
+        private CodeeloUI.Controls.CodeeloTextBox codeeloTextBox3;
     }
 }
