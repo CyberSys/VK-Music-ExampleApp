@@ -48,6 +48,16 @@ namespace VK_Music
             var control = plugin.CreatePanel();
             control.Dock = DockStyle.Fill;
             panel1.Controls.Add(control);
+            
+            // Если загружен плагин MP3StreamingPanel, передаем ему список треков
+            if (plugin.Name == "MP3 Streaming" && dataGridView1.DataSource is List<Track> tracks && tracks.Count > 0)
+            {
+#if DEBUG
+                Logger.Info($"Передача списка треков ({tracks.Count}) в MP3StreamingPanel");
+#endif
+                var streamingPanel = control as Mp3StreamingPanel;
+                streamingPanel?.SetTrackList(tracks);
+            }
         }
 
 

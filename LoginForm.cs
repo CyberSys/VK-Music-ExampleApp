@@ -63,7 +63,7 @@ namespace VK_Music
             base.OnFormClosing(e);
         }
 
-        private void AuthWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void AuthWorker_DoWork(object? sender, DoWorkEventArgs e)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace VK_Music
             }
         }
 
-        private void AuthWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void AuthWorker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
         {
 #if DEBUG
             Logger.Info("Завершение процесса аутентификации");
@@ -164,8 +164,8 @@ namespace VK_Music
 
         public bool NeededTwoAuth { get; private set; }
         private string _twoFactorCode = string.Empty;
-        private TaskCompletionSource<string> _twoFactorTaskSource = null;
-        private System.Windows.Forms.Timer _twoFactorTimer = null;
+        private TaskCompletionSource<string>? _twoFactorTaskSource = null;
+        private System.Windows.Forms.Timer? _twoFactorTimer = null;
         private bool _isCancelled = false;
 
         public async Task<string> GetTwoAuthAsync()
@@ -319,9 +319,9 @@ namespace VK_Music
             return tcs.Task;
         }
 
-        private void Control_MouseLeave(object sender, EventArgs e) => Opacity = 0.9;
+        private void Control_MouseLeave(object? sender, EventArgs e) => Opacity = 0.9;
 
-        private void Control_MouseEnter(object sender, EventArgs e) => Opacity = 1;
+        private void Control_MouseEnter(object? sender, EventArgs e) => Opacity = 1;
 
         private void label1_Click(object sender, EventArgs e)
         {

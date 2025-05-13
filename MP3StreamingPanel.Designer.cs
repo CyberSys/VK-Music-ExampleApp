@@ -28,148 +28,171 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.buttonPlay = new System.Windows.Forms.Button();
-            this.textBoxStreamingUrl = new System.Windows.Forms.TextBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
-            this.progressBarBuffer = new System.Windows.Forms.ProgressBar();
-            this.label2 = new System.Windows.Forms.Label();
-            this.buttonPause = new System.Windows.Forms.Button();
-            this.buttonStop = new System.Windows.Forms.Button();
-            this.labelBuffered = new System.Windows.Forms.Label();
-            this.labelVolume = new System.Windows.Forms.Label();
-            this.volumeSlider1 = new NAudio.Gui.VolumeSlider();
-            this.SuspendLayout();
+            components = new System.ComponentModel.Container();
+            buttonPlay = new Button();
+            textBoxStreamingUrl = new TextBox();
+            timer1 = new System.Windows.Forms.Timer(components);
+            label1 = new Label();
+            progressBarBuffer = new ProgressBar();
+            label2 = new Label();
+            buttonPause = new Button();
+            buttonStop = new Button();
+            labelBuffered = new Label();
+            labelVolume = new Label();
+            volumeSlider1 = new NAudio.Gui.VolumeSlider();
+            buttonNext = new Button();
+            buttonBack = new Button();
+            SuspendLayout();
             // 
             // buttonPlay
             // 
-            this.buttonPlay.Location = new System.Drawing.Point(16, 151);
-            this.buttonPlay.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.buttonPlay.Name = "buttonPlay";
-            this.buttonPlay.Size = new System.Drawing.Size(100, 35);
-            this.buttonPlay.TabIndex = 0;
-            this.buttonPlay.Text = "Play";
-            this.buttonPlay.UseVisualStyleBackColor = true;
-            this.buttonPlay.Click += new System.EventHandler(this.buttonPlay_Click);
+            buttonPlay.Location = new Point(104, 113);
+            buttonPlay.Margin = new Padding(4);
+            buttonPlay.Name = "buttonPlay";
+            buttonPlay.Size = new Size(88, 26);
+            buttonPlay.TabIndex = 0;
+            buttonPlay.Text = "Play";
+            buttonPlay.UseVisualStyleBackColor = true;
+            buttonPlay.Click += buttonPlay_Click;
             // 
             // textBoxStreamingUrl
             // 
-            this.textBoxStreamingUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxStreamingUrl.Location = new System.Drawing.Point(129, 18);
-            this.textBoxStreamingUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBoxStreamingUrl.Name = "textBoxStreamingUrl";
-            this.textBoxStreamingUrl.Size = new System.Drawing.Size(303, 27);
-            this.textBoxStreamingUrl.TabIndex = 1;
-            this.textBoxStreamingUrl.Text = "http://stream.live.vc.bbcmedia.co.uk/bbc_radio_two?s=1651207572&e=1651221972&h=9a" +
-    "d0a5b642b8ff1d2154cb160529c967";
+            textBoxStreamingUrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            textBoxStreamingUrl.Location = new Point(113, 14);
+            textBoxStreamingUrl.Margin = new Padding(4);
+            textBoxStreamingUrl.Name = "textBoxStreamingUrl";
+            textBoxStreamingUrl.Size = new Size(367, 23);
+            textBoxStreamingUrl.TabIndex = 1;
+            textBoxStreamingUrl.Text = "https://jfm1.hostingradio.ru:14536/metal.mp3";
             // 
             // timer1
             // 
-            this.timer1.Interval = 250;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            timer1.Interval = 250;
+            timer1.Tick += timer1_Tick;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 23);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(110, 20);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Streaming URL:";
+            label1.AutoSize = true;
+            label1.Location = new Point(14, 17);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(88, 15);
+            label1.TabIndex = 2;
+            label1.Text = "Streaming URL:";
             // 
             // progressBarBuffer
             // 
-            this.progressBarBuffer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarBuffer.Location = new System.Drawing.Point(129, 60);
-            this.progressBarBuffer.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.progressBarBuffer.Name = "progressBarBuffer";
-            this.progressBarBuffer.Size = new System.Drawing.Size(260, 35);
-            this.progressBarBuffer.TabIndex = 3;
+            progressBarBuffer.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            progressBarBuffer.Location = new Point(113, 45);
+            progressBarBuffer.Margin = new Padding(4);
+            progressBarBuffer.Name = "progressBarBuffer";
+            progressBarBuffer.Size = new Size(329, 26);
+            progressBarBuffer.TabIndex = 3;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 69);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(69, 20);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Buffered:";
+            label2.AutoSize = true;
+            label2.Location = new Point(14, 52);
+            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(55, 15);
+            label2.TabIndex = 4;
+            label2.Text = "Buffered:";
             // 
             // buttonPause
             // 
-            this.buttonPause.Location = new System.Drawing.Point(125, 151);
-            this.buttonPause.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.buttonPause.Name = "buttonPause";
-            this.buttonPause.Size = new System.Drawing.Size(100, 35);
-            this.buttonPause.TabIndex = 5;
-            this.buttonPause.Text = "Pause";
-            this.buttonPause.UseVisualStyleBackColor = true;
-            this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
+            buttonPause.Location = new Point(200, 113);
+            buttonPause.Margin = new Padding(4);
+            buttonPause.Name = "buttonPause";
+            buttonPause.Size = new Size(88, 26);
+            buttonPause.TabIndex = 5;
+            buttonPause.Text = "Pause";
+            buttonPause.UseVisualStyleBackColor = true;
+            buttonPause.Click += buttonPause_Click;
             // 
             // buttonStop
             // 
-            this.buttonStop.Location = new System.Drawing.Point(235, 151);
-            this.buttonStop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.buttonStop.Name = "buttonStop";
-            this.buttonStop.Size = new System.Drawing.Size(100, 35);
-            this.buttonStop.TabIndex = 6;
-            this.buttonStop.Text = "Stop";
-            this.buttonStop.UseVisualStyleBackColor = true;
-            this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
+            buttonStop.Location = new Point(392, 113);
+            buttonStop.Margin = new Padding(4);
+            buttonStop.Name = "buttonStop";
+            buttonStop.Size = new Size(88, 26);
+            buttonStop.TabIndex = 6;
+            buttonStop.Text = "Stop";
+            buttonStop.UseVisualStyleBackColor = true;
+            buttonStop.Click += buttonStop_Click;
             // 
             // labelBuffered
             // 
-            this.labelBuffered.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelBuffered.AutoSize = true;
-            this.labelBuffered.Location = new System.Drawing.Point(397, 69);
-            this.labelBuffered.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelBuffered.Name = "labelBuffered";
-            this.labelBuffered.Size = new System.Drawing.Size(34, 20);
-            this.labelBuffered.TabIndex = 7;
-            this.labelBuffered.Text = "0.0s";
+            labelBuffered.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            labelBuffered.AutoSize = true;
+            labelBuffered.Location = new Point(448, 52);
+            labelBuffered.Margin = new Padding(4, 0, 4, 0);
+            labelBuffered.Name = "labelBuffered";
+            labelBuffered.Size = new Size(27, 15);
+            labelBuffered.TabIndex = 7;
+            labelBuffered.Text = "0.0s";
             // 
             // labelVolume
             // 
-            this.labelVolume.AutoSize = true;
-            this.labelVolume.Location = new System.Drawing.Point(16, 112);
-            this.labelVolume.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelVolume.Name = "labelVolume";
-            this.labelVolume.Size = new System.Drawing.Size(62, 20);
-            this.labelVolume.TabIndex = 8;
-            this.labelVolume.Text = "Volume:";
+            labelVolume.AutoSize = true;
+            labelVolume.Location = new Point(14, 84);
+            labelVolume.Margin = new Padding(4, 0, 4, 0);
+            labelVolume.Name = "labelVolume";
+            labelVolume.Size = new Size(50, 15);
+            labelVolume.TabIndex = 8;
+            labelVolume.Text = "Volume:";
             // 
             // volumeSlider1
             // 
-            this.volumeSlider1.Location = new System.Drawing.Point(129, 106);
-            this.volumeSlider1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.volumeSlider1.Name = "volumeSlider1";
-            this.volumeSlider1.Size = new System.Drawing.Size(145, 29);
-            this.volumeSlider1.TabIndex = 9;
+            volumeSlider1.Location = new Point(113, 80);
+            volumeSlider1.Margin = new Padding(4);
+            volumeSlider1.Name = "volumeSlider1";
+            volumeSlider1.Size = new Size(127, 22);
+            volumeSlider1.TabIndex = 9;
+            // 
+            // buttonNext
+            // 
+            buttonNext.Location = new Point(296, 113);
+            buttonNext.Margin = new Padding(4);
+            buttonNext.Name = "buttonNext";
+            buttonNext.Size = new Size(88, 26);
+            buttonNext.TabIndex = 10;
+            buttonNext.Text = "Next";
+            buttonNext.UseVisualStyleBackColor = true;
+            buttonNext.Click += buttonNext_Click;
+            // 
+            // buttonBack
+            // 
+            buttonBack.Location = new Point(8, 113);
+            buttonBack.Margin = new Padding(4);
+            buttonBack.Name = "buttonBack";
+            buttonBack.Size = new Size(88, 26);
+            buttonBack.TabIndex = 11;
+            buttonBack.Text = "Back";
+            buttonBack.UseVisualStyleBackColor = true;
+            buttonBack.MouseClick += buttonBack_MouseClick;
             // 
             // Mp3StreamingPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.volumeSlider1);
-            this.Controls.Add(this.labelVolume);
-            this.Controls.Add(this.labelBuffered);
-            this.Controls.Add(this.buttonStop);
-            this.Controls.Add(this.buttonPause);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.progressBarBuffer);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBoxStreamingUrl);
-            this.Controls.Add(this.buttonPlay);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "Mp3StreamingPanel";
-            this.Size = new System.Drawing.Size(449, 205);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(buttonBack);
+            Controls.Add(buttonNext);
+            Controls.Add(volumeSlider1);
+            Controls.Add(labelVolume);
+            Controls.Add(labelBuffered);
+            Controls.Add(buttonStop);
+            Controls.Add(buttonPause);
+            Controls.Add(label2);
+            Controls.Add(progressBarBuffer);
+            Controls.Add(label1);
+            Controls.Add(textBoxStreamingUrl);
+            Controls.Add(buttonPlay);
+            Margin = new Padding(4);
+            Name = "Mp3StreamingPanel";
+            Size = new Size(494, 156);
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 
@@ -186,5 +209,7 @@
         private System.Windows.Forms.Label labelBuffered;
         private System.Windows.Forms.Label labelVolume;
         private NAudio.Gui.VolumeSlider volumeSlider1;
+        private Button buttonNext;
+        private Button buttonBack;
     }
 }
