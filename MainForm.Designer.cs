@@ -43,7 +43,6 @@
             dataGridView1.RowTemplate.Height = 23;
             dataGridView1.Size = new Size(344, 378);
             dataGridView1.TabIndex = 0;
-            dataGridView1.CellContentDoubleClick += dataGridView1_CellContentDoubleClick;
             // 
             // panel1
             // 

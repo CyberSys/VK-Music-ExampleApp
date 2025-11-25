@@ -15,6 +15,40 @@ namespace VK_Music
 
         static void Main()
         {
+            // Подписываемся на глобальные исключения
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                try
+                {
+                    var ex = e.ExceptionObject as Exception;
+                    string errorMsg = ex != null ?
+                        $"Необработанное исключение: {ex.Message}\n{ex.StackTrace}" :
+                        "Необработанное исключение (нет объекта исключения)";
+                    
+#if DEBUG
+                    Logger.Error(errorMsg);
+                    if (ex != null) Logger.Exception(ex, "CRITICAL UNHANDLED EXCEPTION");
+#endif
+                    MessageBox.Show(errorMsg, "Критическая ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch
+                {
+                    // Игнорируем ошибки внутри обработчика ошибок
+                }
+            };
+
+            TaskScheduler.UnobservedTaskException += (sender, e) =>
+            {
+                try
+                {
+#if DEBUG
+                    Logger.Exception(e.Exception, "Unobserved Task Exception");
+#endif
+                    e.SetObserved(); // Предотвращаем падение приложения
+                }
+                catch { }
+            };
+
 #if DEBUG
             // Инициализируем логгер при запуске приложения
             Logger.Initialize();

@@ -11,6 +11,8 @@ using VkNet.Model;
 using System.Security.Cryptography;
 using System.Text;
 using System.Diagnostics;
+using System.Net;
+using System.Linq;
 
 namespace VK_Music
 {
@@ -19,6 +21,7 @@ namespace VK_Music
         private static readonly IVkApi? api;
         private static readonly string TokenFilePath = "Token.txt";
         public static bool IsAuth => api?.IsAuthorized ?? false;
+        public static long? CurrentUserId => api?.UserId;
         private static LoginForm loginForm = null;
         
         static VK()
@@ -30,9 +33,14 @@ namespace VK_Music
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddAudioBypass();
             api = new VkApi(serviceCollection);
+            // Устанавливаем User-Agent от Android приложения для минимизации битых ссылок
+            if (api is VkApi vkApi)
+            {
+                // vkApi.Browser.UserAgent = "KateMobileAndroid/56 lite-460 (Android 4.4.2; SDK 19; x86; unknown Android SDK built for x86; en)";
 #if DEBUG
-            Logger.Info("VK API инициализирован");
+                Logger.Info($"VK API инициализирован.");
 #endif
+            }
         }
 
         private static byte[] ProtectToken(string token)
@@ -61,15 +69,30 @@ namespace VK_Music
                 {
                     byte[] protectedToken = File.ReadAllBytes(TokenFilePath);
                     string token = UnprotectToken(protectedToken);
-                    
+
+#if DEBUG
+                    Logger.LogDebug($"Токен успешно расшифрован, длина: {token.Length} символов");
+#endif
+
                     api?.Authorize(new ApiAuthParams
                     {
                         AccessToken = token
                     });
+
+                    if (api?.IsAuthorized == true)
+                    {
 #if DEBUG
-                    Logger.Info("Авторизация по токену успешна");
+                        Logger.Info("Авторизация по токену успешна");
 #endif
-                    return true;
+                        return true;
+                    }
+                    else
+                    {
+#if DEBUG
+                        Logger.Warning("API не авторизован после применения токена");
+#endif
+                        return false;
+                    }
                 }
                 catch (CryptographicException ex)
                 {
@@ -80,10 +103,18 @@ namespace VK_Music
                     File.Delete(TokenFilePath);
                     return false;
                 }
+                catch (VkNet.Exception.VkApiException vkEx)
+                {
+#if DEBUG
+                    Logger.Exception(vkEx, $"Ошибка VK API при проверке токена: {vkEx.ErrorCode}");
+#endif
+                    File.Delete(TokenFilePath);
+                    return false;
+                }
                 catch (Exception ex)
                 {
 #if DEBUG
-                    Logger.Exception(ex, "Ошибка при проверке токена");
+                    Logger.Exception(ex, $"Неожиданная ошибка при проверке токена. Тип: {ex.GetType().Name}");
 #endif
                     return false;
                 }
@@ -132,15 +163,15 @@ namespace VK_Music
                 {
                     Login = login,
                     Password = password,
-                    TwoFactorAuthorization = () => 
-                    { 
+                    TwoFactorAuthorization = () =>
+                    {
 #if DEBUG
                         Logger.Info("Запрос кода двухфакторной аутентификации");
 #endif
                         // Получаем код 2FA от пользователя через форму логина асинхронно
                         // Используем блокирующий вызов для получения результата асинхронной операции
-                        string code = loginForm.GetTwoAuthAsync().GetAwaiter().GetResult();
-                        
+                        string code = Task.Run(() => loginForm.GetTwoAuthAsync()).GetAwaiter().GetResult();
+
                         // Проверяем, был ли получен код или операция была отменена
                         if (string.IsNullOrEmpty(code))
                         {
@@ -150,11 +181,11 @@ namespace VK_Music
                             // Выбрасываем исключение, чтобы прервать процесс авторизации
                             throw new OperationCanceledException("Операция двухфакторной аутентификации была отменена");
                         }
-                        
+
 #if DEBUG
                         Logger.Info("Код двухфакторной аутентификации получен");
 #endif
-                        return code; 
+                        return code;
                     }
                 }));
                 
@@ -202,7 +233,7 @@ namespace VK_Music
             try
             {
                 // Запускаем асинхронный метод синхронно
-                Task.Run(() => SignInAsync(loginForm, login, password)).GetAwaiter().GetResult();
+                SignInAsync(loginForm, login, password).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
@@ -238,6 +269,10 @@ namespace VK_Music
 #endif
                 return list; // Возвращаем пустой список, если пользователь не авторизован
             }
+
+#if DEBUG
+            Logger.LogDebug("VK API инициализирован и пользователь авторизован, начинаем получение треков");
+#endif
 
             try
             {
@@ -282,7 +317,11 @@ namespace VK_Music
 
                     // Проверяем, что URL начинается с http или https
                     string url = item.Url.AbsoluteUri;
-                    if (!url.StartsWith("http://") && !url.StartsWith("https://"))
+                    
+                    // Декодируем и проверяем URL с использованием кастомного декодера
+                    url = DecodeVkUrl(url);
+                    
+                    if (string.IsNullOrEmpty(url) || (!url.StartsWith("http://") && !url.StartsWith("https://")))
                     {
 #if DEBUG
                         Logger.Warning($"Аудиозапись '{item.Artist} - {item.Title}' (ID: {item.Id}) имеет некорректный URL: {url}. Пропускаем.");
@@ -297,8 +336,8 @@ namespace VK_Music
                         Title = string.IsNullOrEmpty(item.Title) ? "Без названия" : item.Title,
                         Duration = FormatDuration(item.Duration),
                         Url = url,
-                        Aid = item.Id.HasValue ? item.Id.Value : 0,
-                        Owner_id = item.OwnerId.HasValue ? item.OwnerId.Value : 0,
+                        Aid = item.Id.HasValue ? item.Id.Value : 0L,
+                        Owner_id = item.OwnerId.HasValue ? item.OwnerId.Value : 0L,
                     };
                     list.Add(newTrack);
 #if DEBUG
@@ -317,14 +356,21 @@ namespace VK_Music
             catch (VkNet.Exception.VkApiException apiEx)
             {
 #if DEBUG
-                Logger.Exception(apiEx, "Ошибка API ВКонтакте при получении списка треков.");
+                Logger.Exception(apiEx, $"Ошибка API ВКонтакте при получении списка треков. Код ошибки: {apiEx.ErrorCode}");
 #endif
                 MessageBox.Show($"Ошибка API ВКонтакте: {apiEx.Message}", "Ошибка API", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (System.Net.Http.HttpRequestException httpEx)
+            {
+#if DEBUG
+                Logger.Exception(httpEx, "Ошибка сетевого подключения при получении списка треков");
+#endif
+                MessageBox.Show($"Ошибка сетевого подключения: {httpEx.Message}", "Ошибка сети", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex) // Обработка более общих исключений для других потенциальных проблем
             {
 #if DEBUG
-                Logger.Exception(ex, "Ошибка при получении списка треков.");
+                Logger.Exception(ex, $"Неожиданная ошибка при получении списка треков. Тип исключения: {ex.GetType().Name}");
 #endif
                 MessageBox.Show($"Произошла ошибка при получении списка треков: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -420,7 +466,11 @@ namespace VK_Music
 
                     // Проверяем, что URL начинается с http или https
                     string url = item.Url.AbsoluteUri;
-                    if (!url.StartsWith("http://") && !url.StartsWith("https://"))
+                    
+                    // Декодируем и проверяем URL с использованием кастомного декодера
+                    url = DecodeVkUrl(url);
+                    
+                    if (string.IsNullOrEmpty(url) || (!url.StartsWith("http://") && !url.StartsWith("https://")))
                     {
 #if DEBUG
                         Logger.Warning($"Аудиозапись '{item.Artist} - {item.Title}' (ID: {item.Id}) имеет некорректный URL: {url}. Пропускаем.");
@@ -435,8 +485,8 @@ namespace VK_Music
                         Title = string.IsNullOrEmpty(item.Title) ? "Без названия" : item.Title,
                         Duration = FormatDuration(item.Duration),
                         Url = url,
-                        Aid = item.Id.HasValue ? item.Id.Value : 0,
-                        Owner_id = item.OwnerId.HasValue ? item.OwnerId.Value : 0,
+                        Aid = item.Id.HasValue ? item.Id.Value : 0L,
+                        Owner_id = item.OwnerId.HasValue ? item.OwnerId.Value : 0L,
                     };
                     list.Add(newTrack);
 #if DEBUG
@@ -466,6 +516,7 @@ namespace VK_Music
 #endif
                 MessageBox.Show($"Произошла ошибка при получении списка треков: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 // For now, returning the list which might be partially filled or empty.
+                return list;
             }
 #if DEBUG
             Logger.Info($"Asynchronously finished getting tracks. Total tracks fetched: {list.Count}");
@@ -539,8 +590,8 @@ namespace VK_Music
                         Title = item.Title ?? "Unknown Title",
                         Duration = (item.Duration / 60).ToString() + ":" + (item.Duration % 60 < 10 ? "0" + (item.Duration % 60).ToString() : (item.Duration % 60).ToString()),
                         Url = item.Url.AbsoluteUri,
-                        Aid = item.Id.HasValue ? item.Id.Value : 0,
-                        Owner_id = item.OwnerId.HasValue ? item.OwnerId.Value : (ownerId ?? 0),
+                        Aid = item.Id.HasValue ? item.Id.Value : 0L,
+                        Owner_id = item.OwnerId.HasValue ? item.OwnerId.Value : (ownerId ?? 0L),
                     };
                     list.Add(newTrack);
 #if DEBUG
@@ -559,6 +610,8 @@ namespace VK_Music
 #if DEBUG
                 Logger.Exception(ex, "Error while getting user audio asynchronously.");
 #endif
+                return list;
+                return list;
             }
 #if DEBUG
             Logger.Info($"Asynchronously finished getting user audio. Total tracks fetched: {list.Count}");
@@ -637,7 +690,7 @@ namespace VK_Music
                         Title = item.Title ?? "Unknown Title",
                         Duration = (item.Duration / 60).ToString() + ":" + (item.Duration % 60 < 10 ? "0" + (item.Duration % 60).ToString() : (item.Duration % 60).ToString()),
                         Url = item.Url.AbsoluteUri,
-                        Aid = item.Id.HasValue ? item.Id.Value : 0,
+                        Aid = item.Id.HasValue ? item.Id.Value : 0L,
                         Owner_id = item.OwnerId.HasValue ? item.OwnerId.Value : ownerId,
                     };
                     list.Add(newTrack);
@@ -657,11 +710,267 @@ namespace VK_Music
 #if DEBUG
                 Logger.Exception(ex, "Error while getting album tracks asynchronously.");
 #endif
+                return list;
+                return list;
             }
 #if DEBUG
             Logger.Info($"Asynchronously finished getting album tracks. Total tracks fetched: {list.Count}");
 #endif
             return list;
+        }
+
+        /// <summary>
+        /// Асинхронно выполняет поиск аудиозаписей.
+        /// </summary>
+        /// <param name="query">Поисковый запрос.</param>
+        /// <param name="count">Количество треков.</param>
+        /// <param name="offset">Смещение.</param>
+        /// <returns>Список найденных треков.</returns>
+        public static async Task<List<Track>> SearchAudioAsync(string query, uint count = 30, uint offset = 0)
+        {
+#if DEBUG
+            Logger.Info($"Поиск аудио: '{query}', Count: {count}, Offset: {offset}");
+#endif
+            var list = new List<Track>();
+            if (api == null)
+            {
+#if DEBUG
+                Logger.Error("VK API не инициализирован");
+#endif
+                return list;
+            }
+            
+            if (!api.IsAuthorized)
+            {
+#if DEBUG
+                Logger.Error("Пользователь не авторизован");
+#endif
+                return list;
+            }
+
+            try
+            {
+                var audioSearchParams = new AudioSearchParams
+                {
+                    Query = query,
+                    Count = count,
+                    Offset = offset,
+                    Autocomplete = true,
+                    Sort = VkNet.Enums.AudioSort.Popularity // Сортировка по популярности
+                };
+
+#if DEBUG
+                Logger.LogDebug($"Отправка запроса поиска: {query}");
+#endif
+                var audioList = await Task.Run(() => api.Audio.Search(audioSearchParams));
+
+                if (audioList == null)
+                {
+#if DEBUG
+                    Logger.Warning("API вернул null список при поиске");
+#endif
+                    return list;
+                }
+                
+                if (audioList.Count == 0)
+                {
+#if DEBUG
+                    Logger.Info("Поиск не дал результатов");
+#endif
+                    return list;
+                }
+
+#if DEBUG
+                Logger.Info($"Найдено треков: {audioList.Count}");
+#endif
+
+                foreach (var item in audioList)
+                {
+                    if (item == null) continue;
+                    
+                    if (item.Url == null)
+                    {
+#if DEBUG
+                        Logger.Warning($"Трек без URL: {item.Artist} - {item.Title}");
+#endif
+                        continue;
+                    }
+
+                    var newTrack = new Track
+                    {
+                        Artist = item.Artist ?? "Неизвестный исполнитель",
+                        Title = item.Title ?? "Без названия",
+                        Duration = FormatDuration(item.Duration),
+                        Url = DecodeVkUrl(item.Url.AbsoluteUri),
+                        Aid = item.Id ?? 0L,
+                        Owner_id = item.OwnerId ?? 0L,
+                    };
+                    list.Add(newTrack);
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Logger.Exception(ex, $"Ошибка при поиске аудио '{query}'");
+#endif
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Асинхронно получает список друзей.
+        /// </summary>
+        /// <returns>Список друзей.</returns>
+        public static async Task<List<User>> GetFriendsAsync()
+        {
+#if DEBUG
+            Logger.Info("Получение списка друзей");
+#endif
+            if (api == null || !api.IsAuthorized) return new List<User>();
+
+            try
+            {
+                var friends = await Task.Run(() => api.Friends.Get(new FriendsGetParams
+                {
+                    // Order = VkNet.Enums.SafetyEnums.FriendsOrder.Hints,
+                    Fields = VkNet.Enums.Filters.ProfileFields.Photo50
+                }));
+                return new List<User>(friends);
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Logger.Exception(ex, "Ошибка при получении списка друзей.");
+#endif
+                return new List<User>();
+            }
+        }
+
+        /// <summary>
+        /// Асинхронно получает список групп.
+        /// </summary>
+        /// <returns>Список групп.</returns>
+        public static async Task<List<Group>> GetGroupsAsync()
+        {
+#if DEBUG
+            Logger.Info("Получение списка групп");
+#endif
+            if (api == null || !api.IsAuthorized) return new List<Group>();
+
+            try
+            {
+                var groups = await Task.Run(() => api.Groups.Get(new GroupsGetParams
+                {
+                    Extended = true,
+                    Filter = VkNet.Enums.Filters.GroupsFilters.Groups
+                }));
+                return new List<Group>(groups);
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Logger.Exception(ex, "Ошибка при получении списка групп.");
+#endif
+                return new List<Group>();
+            }
+        }
+
+        /// <summary>
+        /// Асинхронно получает аудиозаписи конкретного владельца.
+        /// </summary>
+        /// <param name="ownerId">ID владельца.</param>
+        /// <returns>Список треков.</returns>
+        public static async Task<List<Track>> GetAudioAsync(long ownerId)
+        {
+            return await GetUserAudioAsync(ownerId);
+        }
+
+        /// <summary>
+        /// Асинхронно получает список альбомов конкретного владельца.
+        /// </summary>
+        /// <param name="ownerId">ID владельца.</param>
+        /// <returns>Список альбомов.</returns>
+        public static async Task<List<AudioPlaylist>> GetAlbumsByOwnerAsync(long ownerId)
+        {
+#if DEBUG
+            Logger.Info($"Получение списка альбомов для владельца: {ownerId}");
+#endif
+            if (api == null || !api.IsAuthorized) return new List<AudioPlaylist>();
+
+            try
+            {
+                // Увеличиваем count, так как по умолчанию может возвращаться мало
+                var playlists = await Task.Run(() => api.Audio.GetPlaylists(ownerId, count: 100));
+#if DEBUG
+                Logger.Info($"GetAlbumsByOwnerAsync: Получено {playlists.Count} плейлистов для {ownerId}");
+#endif
+                return new List<AudioPlaylist>(playlists);
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Logger.Exception(ex, $"Ошибка при получении списка альбомов для {ownerId}.");
+#endif
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Асинхронно получает список альбомов текущего пользователя.
+        /// </summary>
+        /// <returns>Список альбомов.</returns>
+        public static async Task<List<AudioPlaylist>> GetAlbumsAsync()
+        {
+            if (api == null || !api.IsAuthorized) return new List<AudioPlaylist>();
+            long userId = api.UserId ?? 0;
+            if (userId == 0) return new List<AudioPlaylist>();
+            return await GetAlbumsByOwnerAsync(userId);
+        }
+
+        /// <summary>
+        /// Кастомное декодирование URL аудиозаписей ВКонтакте
+        /// </summary>
+        private static string DecodeVkUrl(string encodedUrl)
+        {
+            if (string.IsNullOrEmpty(encodedUrl))
+                return null;
+
+            try
+            {
+                // Первичное декодирование
+                string url = WebUtility.UrlDecode(encodedUrl);
+
+                // Проверка наличия подписи в URL
+                if (url.Contains("&extra=") && url.Contains("&sign="))
+                {
+                    // Дополнительная обработка по аналогии с реализацией в aimp_VK
+                    var uri = new Uri(url);
+                    var queryParams = uri.Query.TrimStart('?').Split('&')
+                        .Select(part => part.Split('='))
+                        .Where(part => part.Length == 2)
+                        .ToDictionary(part => part[0], part => part[1]);
+                    
+                    string sign = queryParams.ContainsKey("sign") ? queryParams["sign"] : "";
+                    string extra = queryParams.ContainsKey("extra") ? queryParams["extra"] : "";
+
+                    // Здесь должна быть логика проверки подписи и декодирования extra
+                    // В реальной реализации это будет сложный алгоритм, аналогичный используемому в aimp_VK
+                    // Для примера упрощаем:
+                    string decodedExtra = WebUtility.UrlDecode(extra);
+                    
+                    // Собираем новый URL без параметров подписи
+                    url = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}?{decodedExtra}";
+                }
+
+                return url;
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Logger.Exception(ex, "Ошибка при декодировании URL");
+#endif
+                return null;
+            }
         }
     }
 }

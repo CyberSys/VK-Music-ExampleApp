@@ -56,31 +56,41 @@ namespace VK_Music
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            int bytesRead = 0;
-            while (bytesRead < count)
+            try
             {
-                int readAheadAvailableBytes = readAheadLength - readAheadOffset;
-                int bytesRequired = count - bytesRead;
-                if (readAheadAvailableBytes > 0)
+                int bytesRead = 0;
+                while (bytesRead < count)
                 {
-                    int toCopy = Math.Min(readAheadAvailableBytes, bytesRequired);
-                    Array.Copy(readAheadBuffer, readAheadOffset, buffer, offset + bytesRead, toCopy);
-                    bytesRead += toCopy;
-                    readAheadOffset += toCopy;
-                }
-                else
-                {
-                    readAheadOffset = 0;
-                    readAheadLength = sourceStream.Read(readAheadBuffer, 0, readAheadBuffer.Length);
-                    //Debug.WriteLine(String.Format("Read {0} bytes (requested {1})", readAheadLength, readAheadBuffer.Length));
-                    if (readAheadLength == 0)
+                    int readAheadAvailableBytes = readAheadLength - readAheadOffset;
+                    int bytesRequired = count - bytesRead;
+                    if (readAheadAvailableBytes > 0)
                     {
-                        break;
+                        int toCopy = Math.Min(readAheadAvailableBytes, bytesRequired);
+                        Array.Copy(readAheadBuffer, readAheadOffset, buffer, offset + bytesRead, toCopy);
+                        bytesRead += toCopy;
+                        readAheadOffset += toCopy;
+                    }
+                    else
+                    {
+                        readAheadOffset = 0;
+                        readAheadLength = sourceStream.Read(readAheadBuffer, 0, readAheadBuffer.Length);
+                        //Debug.WriteLine(String.Format("Read {0} bytes (requested {1})", readAheadLength, readAheadBuffer.Length));
+                        if (readAheadLength == 0)
+                        {
+                            break;
+                        }
                     }
                 }
+                pos += bytesRead;
+                return bytesRead;
             }
-            pos += bytesRead;
-            return bytesRead;
+            catch (Exception ex)
+            {
+#if DEBUG
+                Logger.Exception(ex, "Ошибка при чтении в ReadFullyStream");
+#endif
+                throw;
+            }
         }
 
         public override long Seek(long offset, SeekOrigin origin)
